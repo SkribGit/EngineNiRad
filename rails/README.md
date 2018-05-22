@@ -15,6 +15,7 @@ Configurable variables:
 - web /mnt volume size
 - rds instance size
 - rds db volume size
+- availability zones to use (default: distribute evenly)
 
 Modules:
 - passenger
