@@ -9,9 +9,9 @@ resource "aws_key_pair" "auth" {
   public_key = "${file(var.public_key_path)}"
 }
 
-resource "aws_instance" "example" {
+resource "aws_instance" "mongodb" {
   ami           = "${lookup(var.amis, var.region)}"
-  instance_type = "t2.small"
+  instance_type = "${var.instance_size}"
 
   key_name = "${aws_key_pair.auth.id}"
 
@@ -27,18 +27,18 @@ resource "aws_instance" "example" {
   }
 }
 
-resource "aws_ebs_volume" "example_volume" {
+resource "aws_ebs_volume" "mongodb_data_volume" {
     availability_zone = "${var.availability_zone}"
     size = "${var.ebs_data_size}"
     tags {
-        Name = "hello_terraform_volume"
+        Name = "mongodb_data_volume"
     }
 }
 
 resource "aws_volume_attachment" "ebs_att" {
   device_name = "/dev/sdh"
-  volume_id = "${aws_ebs_volume.example_volume.id}"
-  instance_id = "${aws_instance.example.id}"
+  volume_id = "${aws_ebs_volume.mongodb_data_volume.id}"
+  instance_id = "${aws_instance.mongodb.id}"
   skip_destroy = true
 }
 
@@ -48,7 +48,7 @@ resource "null_resource" "cluster" {
 
   connection {
     user = "ubuntu"
-    host = "${element(aws_instance.example.*.public_ip, 0)}"
+    host = "${element(aws_instance.mongodb.*.public_ip, 0)}"
   }
 
   provisioner "remote-exec" {

@@ -6,6 +6,9 @@ variable "region" {
 variable "availability_zone" {
   default = "us-east-2a"
 }
+variable "instance_size" {
+  default = "t2.small"
+}
 variable "ebs_data_size" {
   default = "40"
 }
