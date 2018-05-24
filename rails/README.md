@@ -13,8 +13,6 @@ Configurable variables:
 - web instance size
 - web /data volume size
 - web /mnt volume size
-- rds instance size
-- rds db volume size
 - availability zones to use (default: distribute evenly)
 
 Modules:
