@@ -17,6 +17,11 @@ resource "aws_instance" "mongodb" {
 
   availability_zone = "${var.availability_zone}"
 
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_size = "${var.ebs_data_size}"
+  }
+
   connection {
     user = "ubuntu"
   }
@@ -24,31 +29,6 @@ resource "aws_instance" "mongodb" {
   provisioner "file" {
     source = "mongod.conf"
     destination = "/home/ubuntu/mongod.conf"
-  }
-}
-
-resource "aws_ebs_volume" "mongodb_data_volume" {
-    availability_zone = "${var.availability_zone}"
-    size = "${var.ebs_data_size}"
-    tags {
-        Name = "mongodb_data_volume"
-    }
-}
-
-resource "aws_volume_attachment" "ebs_att" {
-  device_name = "/dev/sdh"
-  volume_id = "${aws_ebs_volume.mongodb_data_volume.id}"
-  instance_id = "${aws_instance.mongodb.id}"
-  skip_destroy = true
-}
-
-resource "null_resource" "cluster" {
-
-  depends_on = ["aws_volume_attachment.ebs_att"]
-
-  connection {
-    user = "ubuntu"
-    host = "${element(aws_instance.mongodb.*.public_ip, 0)}"
   }
 
   provisioner "remote-exec" {
@@ -71,4 +51,5 @@ resource "null_resource" "cluster" {
       "sudo service mongod start"
     ]
   }
+
 }
