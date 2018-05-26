@@ -13,13 +13,16 @@ variable "instance_size" {
   default = "t2.small"
 }
 variable "instance_count" {
-  default = "2"
+  default = "1"
 }
 variable "ebs_data_size" {
-  default = "25"
+  default = "30"
 }
 variable "ebs_mnt_size" {
   default = "25"
+}
+variable "ruby_version" {
+  default = "2.5"
 }
 
 variable "availability_zones" {

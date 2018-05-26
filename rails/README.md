@@ -9,10 +9,6 @@ This is a collection of terraform scripts for automated provisioning of a Rails 
 TODO
 
 Configurable variables:
-- number of web instances
-- web instance size
-- web /data volume size
-- web /mnt volume size
 - availability zones to use (default: distribute evenly)
 
 Modules:

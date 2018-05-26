@@ -24,6 +24,11 @@ resource "aws_instance" "web" {
     volume_size = "${var.ebs_data_size}"
   }
 
+  ebs_block_device {
+    device_name = "/dev/sdi"
+    volume_size = "${var.ebs_mnt_size}"
+  }
+
   connection {
     user = "ubuntu"
   }
@@ -35,6 +40,14 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
+      # Setup mnt volume
+      "sudo mkfs -t ext4 /dev/xvdi",
+      "sudo mkdir /mnt",
+      "sudo mount /dev/xvdi /mnt",
+      "sudo chown -R ubuntu:ubuntu /mnt",
+      "mkdir -p /mnt/log/nginx",
+      "mkdir -p /mnt/log/${var.app_name}",
+      # Setup data volume
       "sudo mkfs -t ext4 /dev/xvdh",
       "sudo mkdir /data",
       "sudo mount /dev/xvdh /data",
@@ -48,7 +61,12 @@ resource "aws_instance" "web" {
       "mkdir -p /data/${var.app_name}/releases",
       "mkdir -p /data/${var.app_name}/releases_failed",
       "sudo apt-get update",
-      "sudo apt-get install -y nginx"
+      # Setup Nginx
+      "sudo apt-get install -y nginx",
+      # Setup Ruby
+      "sudo add-apt-repository -y ppa:brightbox/ruby-ng",
+      "sudo apt-get update",
+      "sudo apt install -y ruby${var.ruby_version}"
     ]
   }
 
