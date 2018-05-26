@@ -7,6 +7,9 @@ This is a collection of terraform scripts for automated provisioning of a Rails 
 ## Customization
 
 TODO
+- boot instances inside an autoscaling group
+https://github.com/terraform-aws-modules/terraform-aws-autoscaling
+https://www.terraform.io/docs/providers/aws/r/autoscaling_group.html
 
 Configurable variables:
 - availability zones to use (default: distribute evenly)
