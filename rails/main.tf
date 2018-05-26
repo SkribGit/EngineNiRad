@@ -9,7 +9,9 @@ resource "aws_key_pair" "auth" {
   public_key = "${file(var.public_key_path)}"
 }
 
-resource "aws_instance" "mongodb" {
+resource "aws_instance" "web" {
+  count         = "${var.instance_count}"
+  key_name      = "web-${count.index}"
   ami           = "${lookup(var.amis, var.region)}"
   instance_type = "${var.instance_size}"
 
@@ -17,38 +19,18 @@ resource "aws_instance" "mongodb" {
 
   availability_zone = "${var.availability_zone}"
 
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_size = "${var.ebs_data_size}"
+  }
+
   connection {
     user = "ubuntu"
   }
 
   provisioner "file" {
-    source = "mongod.conf"
-    destination = "/home/ubuntu/mongod.conf"
-  }
-}
-
-resource "aws_ebs_volume" "mongodb_data_volume" {
-    availability_zone = "${var.availability_zone}"
-    size = "${var.ebs_data_size}"
-    tags {
-        Name = "mongodb_data_volume"
-    }
-}
-
-resource "aws_volume_attachment" "ebs_att" {
-  device_name = "/dev/sdh"
-  volume_id = "${aws_ebs_volume.mongodb_data_volume.id}"
-  instance_id = "${aws_instance.mongodb.id}"
-  skip_destroy = true
-}
-
-resource "null_resource" "cluster" {
-
-  depends_on = ["aws_volume_attachment.ebs_att"]
-
-  connection {
-    user = "ubuntu"
-    host = "${element(aws_instance.mongodb.*.public_ip, 0)}"
+    source = "nginx.conf"
+    destination = "/home/ubuntu/nginx.conf"
   }
 
   provisioner "remote-exec" {
@@ -56,19 +38,18 @@ resource "null_resource" "cluster" {
       "sudo mkfs -t ext4 /dev/xvdh",
       "sudo mkdir /data",
       "sudo mount /dev/xvdh /data",
-      "sudo mkdir /data/mongodb",
-      "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5",
-      "echo \"deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list",
+      "sudo chown -R ubuntu:ubuntu /data",
+      # prepare the nginx directories
+      "mkdir -p /data/nginx/conf",
+      # prepare the app directories
+      "mkdir -p /data/${var.app_name}/shared/",
+      "mkdir -p /data/${var.app_name}/shared/tmp",
+      "mkdir -p /data/${var.app_name}/shared/config",
+      "mkdir -p /data/${var.app_name}/releases",
+      "mkdir -p /data/${var.app_name}/releases_failed",
       "sudo apt-get update",
-      "sudo apt-get install -y mongodb-org",
-      "echo \"mongodb-org hold\" | sudo dpkg --set-selections",
-      "echo \"mongodb-org-server hold\" | sudo dpkg --set-selections",
-      "echo \"mongodb-org-shell hold\" | sudo dpkg --set-selections",
-      "echo \"mongodb-org-mongos hold\" | sudo dpkg --set-selections",
-      "echo \"mongodb-org-tools hold\" | sudo dpkg --set-selections",
-      "sudo chown -R mongodb:mongodb /data/mongodb",
-      "sudo mv /home/ubuntu/mongod.conf /etc/mongod.conf",
-      "sudo service mongod start"
+      "sudo apt-get install -y nginx"
     ]
   }
+
 }

@@ -6,10 +6,13 @@ variable "region" {
 variable "availability_zone" {
   default = "us-east-2a"
 }
+variable "app_name" {
+  default = "myapp"
+}
 variable "instance_size" {
   default = "t2.small"
 }
-variables "instance_count" {
+variable "instance_count" {
   default = "2"
 }
 variable "ebs_data_size" {
