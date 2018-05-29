@@ -11,6 +11,10 @@ TODO
 https://github.com/terraform-aws-modules/terraform-aws-autoscaling
 https://www.terraform.io/docs/providers/aws/r/autoscaling_group.html
 
+Networking options
+- simple: all instances are on public subnets
+- bastion host - TODO later
+
 Configurable variables:
 - availability zones to use (default: distribute evenly)
 
