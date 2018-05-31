@@ -43,52 +43,15 @@ resource "aws_instance" "web" {
     destination = "/home/ubuntu/nginx.conf"
   }
 
+  provisioner "file" {
+    source = "configure.sh"
+    destination = "/home/ubuntu/configure.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
-      # Setup mnt volume
-      "sudo mkfs -t ext4 /dev/xvdi",
-      "sudo mkdir /mnt",
-      "sudo mount /dev/xvdi /mnt",
-      "sudo chown -R ubuntu:ubuntu /mnt",
-      "mkdir -p /mnt/log/nginx",
-      "mkdir -p /mnt/log/${var.app_name}",
-      # Setup data volume
-      "sudo mkfs -t ext4 /dev/xvdh",
-      "sudo mkdir /data",
-      "sudo mount /dev/xvdh /data",
-      "sudo chown -R ubuntu:ubuntu /data",
-      # prepare the nginx directories
-      "mkdir -p /data/nginx/conf",
-      "sudo cp /home/ubuntu/nginx.conf /etc/nginx/nginx.conf",
-      # prepare the app directories
-      "mkdir -p /data/${var.app_name}/shared/",
-      "mkdir -p /data/${var.app_name}/shared/tmp",
-      "mkdir -p /data/${var.app_name}/shared/config",
-      "mkdir -p /data/${var.app_name}/releases",
-      "mkdir -p /data/${var.app_name}/releases_failed",
-      "sudo apt-get update",
-      # Setup Nginx
-      "sudo apt-get install -y nginx",
-      # Setup Ruby
-      "sudo add-apt-repository -y ppa:brightbox/ruby-ng",
-      "sudo apt-get update",
-      "sudo apt install -y ruby${var.ruby_version}",
-      # Setup Passenger
-      # Based on https://www.phusionpassenger.com/library/install/nginx/install/oss/xenial/
-      "sudo apt-get install -y dirmngr gnupg",
-      "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7",
-      "sudo apt-get install -y apt-transport-https ca-certificates",
-      "sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'",
-      "sudo apt-get update",
-      "sudo apt-get install -y nginx-extras passenger",
-      # Setup PostgreSQL
-      "sudo apt-get install -y postgresql postgresql-contrib postgresql-client"
-      # TODO
-      # initialize the DB
-      # setup the deploy keys
-      # do an initial deploy of the app
-      # verify that mina deploy works
-      # setup passenger_worker_killer
+      "chmod +x /home/ubuntu/configure.sh",
+      "sudo /home/ubuntu/configure.sh"
     ]
   }
 
