@@ -83,6 +83,12 @@ resource "aws_instance" "web" {
       "sudo apt-get install -y nginx-extras passenger",
       # Setup PostgreSQL
       "sudo apt-get install -y postgresql postgresql-contrib postgresql-client"
+      # TODO
+      # initialize the DB
+      # setup the deploy keys
+      # do an initial deploy of the app
+      # verify that mina deploy works
+      # setup passenger_worker_killer
     ]
   }
 
