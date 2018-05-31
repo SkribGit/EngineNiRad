@@ -6,23 +6,41 @@ variable "region" {
 variable "availability_zone" {
   default = "us-east-2a"
 }
+
 variable "app_name" {
   default = "myapp"
 }
+
+variable "environment_name" {
+  default = "staging"
+}
+
 variable "instance_size" {
   default = "t2.small"
 }
+
 variable "instance_count" {
   default = "1"
 }
+
 variable "ebs_data_size" {
   default = "30"
 }
+
 variable "ebs_mnt_size" {
   default = "25"
 }
+
+variable "ebs_db_size" {
+  default = "50"
+}
+
 variable "ruby_version" {
   default = "2.5"
+}
+
+variable "postgresql_version" {
+  default = "9.6"
 }
 
 variable "availability_zones" {
