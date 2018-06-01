@@ -1,3 +1,9 @@
+# TODO
+- clean up the Quick Start section. Provide links to the other sections as necessary
+- complete the Customization section
+- complete the setup: nginx should forward requests to the Rails app
+https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/deploy_app.html
+
 # Rails
 
 This is a collection of terraform scripts for automated provisioning of a single-instance Rails environment on AWS.
@@ -56,18 +62,13 @@ bundle exec cap production deploy
 
 ## Customization
 
-To use a different instance size, modify variables.tf
+The following can be customized in `variables.tf`
+- AWS region
+- AWS availability zone
+- instance size
+- volume sizes for the /data, /mnt, and /db volumes
 
-## TODO
+To use a different Ubuntu version, or to use a custom AMI, modify the AMIs map in `variables.tf`. The list of Ubuntu AMIs can be found in https://cloud-images.ubuntu.com/locator/ec2/
 
----
-Do the following steps - manually first, then integrate into the script:
+For more advanced customizations, you can fork this repository and modify `./configure.sh`.
 
-Setup the deploy keys
-
-Do an initial setup of the application
-
-
-passenger_worker_killer
-
-Use this sample Rails application: http://github.com/radamanthus/helloes
