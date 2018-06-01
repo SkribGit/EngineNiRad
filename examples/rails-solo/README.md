@@ -8,20 +8,15 @@ As this is a single-server setup, this does not follow the immutable infrastruct
 
 ## Quick Start
 
-- Generate the deploy key - provide manual instructions for now
-- Provision the instance - run `terraform apply`
+- Generate the deploy key
+- Provision the instance
+  - `terraform init` (one time only)
+  - run `terraform apply`
 - Deploy
 
-## Deployment
+## Setup the deploy key
 
-First, generate a deploy key pair:
-
-- generate the deploy key locally
-- upload the private key to the instances
-- print the public key and provide the user instructions on how to setup the deploy key on Github and (optional) Bitbucket
-- inform the user about securing the private and public key and the ramifications of losing it (user will have to regenerate the key)
-
-run `ssh-keygen -t rsa -N "" -f deploy_key` to generate the deploy key pair
+Run `ssh-keygen -t rsa -N "" -f deploy_key` to generate the deploy key pair
 
 Print the public key:
 
@@ -31,29 +26,39 @@ cat deploy_key.pub
 
 then copy the key and add it as a deploy key to https://github.com/yourgithubusername/yourgithubappname/settings/keys
 
+The terraform script will upload the deploy key to the instances. Make sure you generate the deploy key first before running provisioning the instances.
+
 Store the deploy key in a secure place. DO NOT add it to a public repository. If you lose the deploy key you will have to delete the old key from Github, generate a new one, and upload the public key to the web instances, into `/home/ubuntu/.ssh/id_rsa.pub`.
 
-capistrano
-- add to Gemfile and bundle install
+## Deployment
+
+Add Capistrano to the Gemfile:
+
 ```
 group :development do
   gem "capistrano", "~> 3.10", require: false
 end
 ```
+
 https://github.com/capistrano/capistrano#install-the-capistrano-gem
 
+Initialize Capistrano:
+
+```
 bundle exec cap install
+```
 
-(make sure deploy keys are setup in Github first)
+Deploy
 
+```
 bundle exec cap production deploy
+```
 
 ## Customization
 
 To use a different instance size, modify variables.tf
 
 ## TODO
-
 
 ---
 Do the following steps - manually first, then integrate into the script:
