@@ -1,3 +1,7 @@
+## Configurable variables here
+# app_name = helloes
+# db_name = helloes
+
 # Setup mnt volume
 mkfs -t ext4 /dev/xvdi
 mkdir /mnt
@@ -36,9 +40,11 @@ apt-get update
 apt-get install -y nginx
 
 # Setup Ruby
-add-apt-repository -y ppa:brightbox/ruby-ng
-apt-get update
-apt install -y ruby2.5
+apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev
+gem install bundler
+
+# Setup a Javascript runtime
+apt-get install -y nodejs
 
 # Setup Passenger
 # Based on https://www.phusionpassenger.com/library/install/nginx/install/oss/xenial/
@@ -50,7 +56,7 @@ apt-get update
 apt-get install -y nginx-extras passenger
 
 # Setup PostgreSQL
-apt-get install -y postgresql postgresql-contrib postgresql-client
+apt-get install -y postgresql postgresql-contrib postgresql-client libpq-dev
 
 # initialize the DB
 cd /tmp
@@ -60,8 +66,11 @@ pg_createcluster 9.5 helloes -d /db/postgresql/9.5
 sudo -u postgres bash -c 'createdb helloes'
 sudo -u postgres bash -c 'createuser ubuntu'
 sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE helloes TO ubuntu"'
+
 # TODO
-# setup the deploy keys
+# Ensure the deploy key has the correct file permissions
+chmod 400 /home/ubuntu/.ssh/id_rsa
+
 # do an initial deploy of the app
 # verify that mina deploy works
 # setup passenger_worker_killer

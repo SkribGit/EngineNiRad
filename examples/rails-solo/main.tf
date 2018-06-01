@@ -48,6 +48,11 @@ resource "aws_instance" "web" {
     destination = "/home/ubuntu/configure.sh"
   }
 
+  provisioner "file" {
+    source = "deploy_key.pub"
+    destination = "/home/ubuntu/.ssh/id_rsa.pub"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/configure.sh",
