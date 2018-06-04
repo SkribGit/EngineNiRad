@@ -50,7 +50,7 @@ resource "aws_instance" "web" {
 
   provisioner "file" {
     source = "deploy_key.pub"
-    destination = "/home/ubuntu/.ssh/id_rsa.pub"
+    destination = "/home/ubuntu/deploy_key.pub"
   }
 
   provisioner "remote-exec" {

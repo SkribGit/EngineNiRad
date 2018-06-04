@@ -1,6 +1,6 @@
 ## Configurable variables here
-# app_name = helloes
-# db_name = helloes
+# app_name = hellorails
+# db_name = hellorails
 
 # Setup mnt volume
 mkfs -t ext4 /dev/xvdi
@@ -8,7 +8,7 @@ mkdir /mnt
 mount /dev/xvdi /mnt
 chown -R ubuntu:ubuntu /mnt
 mkdir -p /mnt/log/nginx
-mkdir -p /mnt/log/helloes
+mkdir -p /mnt/log/hellorails
 
 # Setup data volume
 mkfs -t ext4 /dev/xvdh
@@ -27,12 +27,12 @@ mkdir -p /data/nginx/conf
 cp /home/ubuntu/nginx.conf /etc/nginx/nginx.conf
 
 # prepare the app directories
-mkdir -p /data/helloes/shared/
-mkdir -p /data/helloes/shared/tmp
-mkdir -p /data/helloes/shared/config
-mkdir -p /data/helloes/releases
-mkdir -p /data/helloes/releases_failed
-chown -R ubuntu:ubuntu /data/helloes
+mkdir -p /data/hellorails/shared/
+mkdir -p /data/hellorails/shared/tmp
+mkdir -p /data/hellorails/shared/config
+mkdir -p /data/hellorails/releases
+mkdir -p /data/hellorails/releases_failed
+chown -R ubuntu:ubuntu /data/hellorails
 
 apt-get update
 
@@ -47,30 +47,33 @@ gem install bundler
 apt-get install -y nodejs
 
 # Setup Passenger
-# Based on https://www.phusionpassenger.com/library/install/nginx/install/oss/xenial/
+# Based on https://www.phusionpassenger.com/library/install/nginx/install/oss/bionic/
 apt-get install -y dirmngr gnupg
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 apt-get install -y apt-transport-https ca-certificates
-sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'
+sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main > /etc/apt/sources.list.d/passenger.list'
 apt-get update
-apt-get install -y nginx-extras passenger
+apt-get install -y libnginx-mod-http-passenger
 
 # Setup PostgreSQL
 apt-get install -y postgresql postgresql-contrib postgresql-client libpq-dev
 
 # initialize the DB
 cd /tmp
-mkdir -p /db/postgresql/9.5
+mkdir -p /db/postgresql/10.3
 chown -R postgres:postgres /db/postgresql
-pg_createcluster 9.5 helloes -d /db/postgresql/9.5
-sudo -u postgres bash -c 'createdb helloes'
+ln -s /var/lib/postgresql/10/main /db/postgresql/10.3
+sudo -u postgres bash -c 'createdb hellorails'
 sudo -u postgres bash -c 'createuser ubuntu'
-sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE helloes TO ubuntu"'
+sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE hellorails TO ubuntu"'
+
+# Ensure the deploy key has the correct file permissions
+mkdir -p /home/ubuntu/.ssh
+chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+mv /home/ubuntu/deploy_key.pub /home/ubuntu/.ssh/id_rsa.pub
+chmod 400 /home/ubuntu/.ssh/id_rsa.pub
 
 # TODO
-# Ensure the deploy key has the correct file permissions
-chmod 400 /home/ubuntu/.ssh/id_rsa
-
 # do an initial deploy of the app
 # verify that mina deploy works
 # setup passenger_worker_killer

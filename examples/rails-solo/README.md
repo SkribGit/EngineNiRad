@@ -42,6 +42,14 @@ In case you lost the deploy key and need to regenerate it, follow these steps:
 - Generate a new deploy key as above
 - Upload the generated public key, `deploy_key.pub`, to `/home/ubuntu/.ssh/id_rsa.pub`
 
+## Provision the instance
+
+If you have not yet done so, please download and setup [Terraform](http://terraform.io).
+
+If this is your first time running the script, run `terraform init`.
+
+To provision and configure the instance, run `terraform apply`.
+
 ## Deployment
 
 Add Capistrano to the Gemfile:
@@ -60,10 +68,41 @@ Initialize Capistrano:
 bundle exec cap install
 ```
 
+Add the instance hostname to `config/deploy/staging.rb`. Run:
+
+```
+terraform show | grep public_dns
+```
+
+The output will be something like:
+
+```
+  public_dns = ec2-18-216-176-104.us-east-2.compute.amazonaws.com
+```
+
+Get the hostname and add it to `config/deploy/staging.rb`:
+
+```
+server "ec2-18-216-176-104.us-east-2.compute.amazonaws.com", user: "ubuntu", roles: "${app db web}"
+```
+
+SSH to the instance and create the file `/data/HelloRails/shared/config/database.yml`
+
+```
+staging:
+  adapter: postgresql
+  encoding: unicode
+  database: hellorails
+```
+
+Create the secrets file
+
+SSH to the instance and create the file `/data/HelloRails/shared/config/secrets.yml`
+
 Deploy
 
 ```
-bundle exec cap production deploy
+bundle exec cap staging deploy
 ```
 
 ## Customization
