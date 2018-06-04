@@ -75,5 +75,5 @@ chmod 400 /home/ubuntu/.ssh/id_rsa.pub
 
 # TODO
 # do an initial deploy of the app
-# verify that mina deploy works
+# verify that cap deploy works
 # setup passenger_worker_killer

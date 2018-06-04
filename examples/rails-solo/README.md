@@ -4,6 +4,12 @@
 - complete the setup: nginx should forward requests to the Rails app
 https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/deploy_app.html
 
+- create appname.conf
+- create provisioner to upload appname.conf
+- modify configure.sh to copy appname.conf to /etc/nginx/sites-enabled
+
+Add a bundle install step to the capistrano config
+
 # Rails
 
 This is a collection of terraform scripts for automated provisioning of a single-instance Rails environment on AWS.
