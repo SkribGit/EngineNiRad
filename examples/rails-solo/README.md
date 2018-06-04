@@ -32,9 +32,15 @@ cat deploy_key.pub
 
 then copy the key and add it as a deploy key to https://github.com/yourgithubusername/yourgithubappname/settings/keys
 
-The terraform script will upload the deploy key to the instances. Make sure you generate the deploy key first before running provisioning the instances.
+The terraform script will upload the deploy key to the instances. Make sure you generate the deploy key first before provisioning the instance.
 
-Store the deploy key in a secure place. DO NOT add it to a public repository. If you lose the deploy key you will have to delete the old key from Github, generate a new one, and upload the public key to the web instances, into `/home/ubuntu/.ssh/id_rsa.pub`.
+Store the deploy key in a secure place. DO NOT add it to a public repository.
+
+In case you lost the deploy key and need to regenerate it, follow these steps:
+
+- delete the old deploy key from your repository (Github, Bitbucket, etc.)
+- Generate a new deploy key as above
+- Upload the generated public key, `deploy_key.pub`, to `/home/ubuntu/.ssh/id_rsa.pub`
 
 ## Deployment
 
