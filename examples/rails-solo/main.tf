@@ -34,6 +34,10 @@ resource "aws_instance" "web" {
     volume_size = "${var.ebs_db_size}"
   }
 
+  user_data = <<-EOF
+              mkdir -p /home/ubuntu/.enginenirad
+              EOF
+
   connection {
     user = "ubuntu"
   }
@@ -44,19 +48,24 @@ resource "aws_instance" "web" {
   }
 
   provisioner "file" {
+    source = "app.conf"
+    destination = "/home/ubuntu/.enginenirad/app.conf"
+  }
+
+  provisioner "file" {
     source = "configure.sh"
-    destination = "/home/ubuntu/configure.sh"
+    destination = "/home/ubuntu/.enginenirad/configure.sh"
   }
 
   provisioner "file" {
     source = "deploy_key.pub"
-    destination = "/home/ubuntu/deploy_key.pub"
+    destination = "/home/ubuntu/.enginenirad/deploy_key.pub"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /home/ubuntu/configure.sh",
-      "sudo /home/ubuntu/configure.sh"
+      "chmod +x /home/ubuntu/.enginenirad/configure.sh",
+      "sudo /home/ubuntu/.enginenirad/configure.sh"
     ]
   }
 

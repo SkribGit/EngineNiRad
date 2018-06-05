@@ -38,6 +38,7 @@ apt-get update
 
 # Setup Nginx
 apt-get install -y nginx
+cp /home/nginx/.enginenirad/app.conf /etc/nginx/sites-enabled/hellorails.conf
 
 # Setup Ruby
 apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev
@@ -70,7 +71,7 @@ sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE hellorails T
 # Ensure the deploy key has the correct file permissions
 mkdir -p /home/ubuntu/.ssh
 chown -R ubuntu:ubuntu /home/ubuntu/.ssh
-mv /home/ubuntu/deploy_key.pub /home/ubuntu/.ssh/id_rsa.pub
+mv /home/ubuntu/.enginenirad/deploy_key.pub /home/ubuntu/.ssh/id_rsa.pub
 chmod 400 /home/ubuntu/.ssh/id_rsa.pub
 
 # TODO
