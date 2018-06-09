@@ -38,7 +38,7 @@ apt-get update
 
 # Setup Nginx
 apt-get install -y nginx
-cp /home/nginx/.enginenirad/app.conf /etc/nginx/sites-enabled/hellorails.conf
+cp /home/ubuntu/.enginenirad/app.conf /etc/nginx/sites-enabled/hellorails.conf
 
 # Setup Ruby
 apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev

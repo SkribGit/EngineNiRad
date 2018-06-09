@@ -34,12 +34,14 @@ resource "aws_instance" "web" {
     volume_size = "${var.ebs_db_size}"
   }
 
-  user_data = <<-EOF
-              mkdir -p /home/ubuntu/.enginenirad
-              EOF
-
   connection {
     user = "ubuntu"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir -p /home/ubuntu/.enginenirad"
+    ]
   }
 
   provisioner "file" {
