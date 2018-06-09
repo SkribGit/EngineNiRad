@@ -3,8 +3,8 @@
 - complete the Customization section
 - complete the setup: nginx should forward requests to the Rails app
 https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/deploy_app.html
-
-* Add a bundle install step to the capistrano config
+- add instructions on how to modify the application for Capistrano
+- define the requirements for the cli app (which config files need to be modified)
 
 # Rails
 
