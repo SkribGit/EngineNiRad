@@ -1,0 +1,11 @@
+APP_NAME: HelloRails
+RAILS_ENV: staging
+SCM_URL: https://github.com/radamanthus/HelloRails.git
+HOSTNAME: test-hellorails.com
+INSTANCE_SIZE: t2.small
+DB_VOLUME_SIZE: 30
+MNT_VOLUME_SIZE: 25
+DATA_VOLUME_SIZE: 20
+WEB_WORKER_MEMORY_LIMIT: 500
+WEB_WORKER_COUNT: 10
+
