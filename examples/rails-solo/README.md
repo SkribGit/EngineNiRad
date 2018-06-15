@@ -1,16 +1,5 @@
 # TODO
-- identify the variables that define a Rails app/environment:
-  - app name
-  - db name (use the app name)
-  - rails_env
-  - SCM clone URL
-  - hostname
-  - instance size
-  - data, mnt, db volume sizes
-  - passenger worker memory limit
-  - number of passenger workers
-- ^ put these variables in a configuration file, app.yml
-- write a cli app that will parse app.yml and modify these files as needed:
+- write a cli app that will parse rad.yml and modify these files as needed:
   - configure.sh
   - variables.tf
   - app.conf
