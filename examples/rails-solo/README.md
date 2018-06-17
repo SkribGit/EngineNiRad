@@ -11,7 +11,7 @@ https://github.com/radamanthus/rad
 - complete the setup: nginx should forward requests to the Rails app
 https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/deploy_app.html
 - add instructions on how to modify the application for Capistrano
-- define the requirements for the cli app (which config files need to be modified)
+- create a vpc and a security group. Open port 80 for the security group
 
 # Rails
 
