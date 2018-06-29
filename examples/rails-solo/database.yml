@@ -2,7 +2,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
 
-staging:
+$RAILS_ENV:
   <<: *default
-  database: hellorails
+  database: $APP_NAME
 

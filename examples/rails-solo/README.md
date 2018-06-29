@@ -95,18 +95,9 @@ Get the hostname and add it to `config/deploy/staging.rb`:
 server "ec2-18-216-176-104.us-east-2.compute.amazonaws.com", user: "ubuntu", roles: "${app db web}"
 ```
 
-SSH to the instance and create the file `/data/HelloRails/shared/config/database.yml`
-
-```
-staging:
-  adapter: postgresql
-  encoding: unicode
-  database: hellorails
-```
-
 Create the secrets file
 
-SSH to the instance and create the file `/data/HelloRails/shared/config/secrets.yml`
+SSH to the instance and create the file `/data/APP_NAME/shared/config/secrets.yml`
 
 Deploy
 

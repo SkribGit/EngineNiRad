@@ -1,14 +1,10 @@
-## Configurable variables here
-# app_name = hellorails
-# db_name = hellorails
-
 # Setup mnt volume
 mkfs -t ext4 /dev/xvdi
 mkdir /mnt
 mount /dev/xvdi /mnt
 chown -R ubuntu:ubuntu /mnt
 mkdir -p /mnt/log/nginx
-mkdir -p /mnt/log/hellorails
+mkdir -p /mnt/log/$APP_NAME
 
 # Setup data volume
 mkfs -t ext4 /dev/xvdh
@@ -27,18 +23,18 @@ mkdir -p /data/nginx/conf
 cp /home/ubuntu/nginx.conf /etc/nginx/nginx.conf
 
 # prepare the app directories
-mkdir -p /data/hellorails/shared/
-mkdir -p /data/hellorails/shared/tmp
-mkdir -p /data/hellorails/shared/config
-mkdir -p /data/hellorails/releases
-mkdir -p /data/hellorails/releases_failed
-chown -R ubuntu:ubuntu /data/hellorails
+mkdir -p /data/$APP_NAME/shared/
+mkdir -p /data/$APP_NAME/shared/tmp
+mkdir -p /data/$APP_NAME/shared/config
+mkdir -p /data/$APP_NAME/releases
+mkdir -p /data/$APP_NAME/releases_failed
+chown -R ubuntu:ubuntu /data/$APP_NAME
 
 apt-get update
 
 # Setup Nginx
 apt-get install -y nginx
-cp /home/ubuntu/.enginenirad/app.conf /etc/nginx/sites-enabled/hellorails.conf
+cp /home/ubuntu/.enginenirad/app.conf /etc/nginx/sites-enabled/$APP_NAME.conf
 
 # Setup Ruby
 apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev
@@ -64,9 +60,9 @@ cd /tmp
 mkdir -p /db/postgresql/10.3
 chown -R postgres:postgres /db/postgresql
 ln -s /var/lib/postgresql/10/main /db/postgresql/10.3
-sudo -u postgres bash -c 'createdb hellorails'
+sudo -u postgres bash -c 'createdb $APP_NAME'
 sudo -u postgres bash -c 'createuser ubuntu'
-sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE hellorails TO ubuntu"'
+sudo -u postgres bash -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE $APP_NAME TO ubuntu"'
 
 # Ensure the deploy key has the correct file permissions
 mkdir -p /home/ubuntu/.ssh
