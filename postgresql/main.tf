@@ -18,23 +18,24 @@ resource "aws_instance" "postgresql" {
   availability_zone = "${var.availability_zone}"
 
   ebs_block_device {
-    device_name = "/dev/sdh"
-    volume_size = "${var.ebs_data_size}"
+    device_name = "/dev/sdj"
+    volume_size = "${var.ebs_db_size}"
   }
 
   connection {
     user = "ubuntu"
   }
 
-  # From http://www.codebind.com/linux-tutorials/install-postgresql-9-6-ubuntu-18-04-lts-linux/
   provisioner "remote-exec" {
     inline = [
-      "sudo sh -c 'echo deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main >> /etc/apt/sources.list.d/pgdg.list'",
-      "sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -",
-      "sudo apt-get -y update",
-      "sudo apt-get -y upgrade",
-      "sudo apt install -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 libpq-dev"
+      "mkdir -p /home/ubuntu/.enginenirad"
     ]
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/.enginenirad/configure.sh",
+      "sudo /home/ubuntu/.enginenirad/configure.sh"
+    ]
+  }
 }
