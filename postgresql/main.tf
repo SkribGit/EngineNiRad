@@ -9,7 +9,7 @@ resource "aws_key_pair" "auth" {
   public_key = "${file(var.public_key_path)}"
 }
 
-resource "aws_instance" "mongodb" {
+resource "aws_instance" "postgresql" {
   ami           = "${lookup(var.amis, var.region)}"
   instance_type = "${var.instance_size}"
 
@@ -26,9 +26,14 @@ resource "aws_instance" "mongodb" {
     user = "ubuntu"
   }
 
+  # From http://www.codebind.com/linux-tutorials/install-postgresql-9-6-ubuntu-18-04-lts-linux/
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
+      "sudo sh -c 'echo deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main >> /etc/apt/sources.list.d/pgdg.list'",
+      "sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -",
+      "sudo apt-get -y update",
+      "sudo apt-get -y upgrade",
+      "sudo apt install -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 libpq-dev"
     ]
   }
 

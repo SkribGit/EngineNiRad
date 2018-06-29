@@ -13,14 +13,20 @@ variable "ebs_data_size" {
   default = "40"
 }
 
-# Ubuntu 16.04 AMI IDs on various regions
+# Ubuntu 18.04 AMI IDs on various regions
+# These are the AMIs for hvm:ebs-ssd instances
+# From https://cloud-images.ubuntu.com/locator/ec2/
 variable "amis" {
   type = "map"
   default = {
-    "us-east-1" = "ami-43a15f3e",
-    "us-east-2" = "ami-916f59f4",
-    "us-west-2" = "ami-4e79ed36",
-    "ap-southeast-1" = "ami-52d4802e"
+    "ap-northeast-1" = "ami-9ed12ce1",
+    "ap-northeast-2" = "ami-943e96fa",
+    "ap-southeast-1" = "ami-8cc7f5f0",
+    "ap-southeast-2" = "ami-5d3aea3f",
+    "us-east-1" = "ami-432eb53c",
+    "us-east-2" = "ami-18073b7d",
+    "us-west-1" = "ami-29918949",
+    "us-west-2" = "ami-d27709aa"
   }
 }
 
