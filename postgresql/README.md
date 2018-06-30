@@ -1,3 +1,7 @@
+# TODO
+
+- associate the instance into an existing VPC and security group
+
 This is a [Terraform](https://www.terraform.io/) script for automated provisioning of an EC2 instance running PostgreSQL.
 
 ## Quick Start
