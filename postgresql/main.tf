@@ -26,16 +26,53 @@ resource "aws_instance" "postgresql" {
     user = "ubuntu"
   }
 
+  # Setup PostgreSQL
   provisioner "remote-exec" {
     inline = [
-      "mkdir -p /home/ubuntu/.enginenirad"
+      # Setup db volume
+      "sudo mkfs -t ext4 /dev/xvdj",
+      "sudo mkdir /db",
+      "sudo mount /dev/xvdj /db",
+      "sudo chown -R ubuntu:ubuntu /db",
+
+      # From http://www.codebind.com/linux-tutorials/install-postgresql-9-6-ubuntu-18-04-lts-linux/
+      "sudo sh -c 'echo deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main >> /etc/apt/sources.list.d/pgdg.list'",
+      "sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -",
+      "sudo apt-get -y update",
+      "sudo apt-get -y upgrade",
+      "sudo apt install -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 libpq-dev"
     ]
   }
 
+  # Upload the PostgreSQL configuration files
+  provisioner "file" {
+    source = "postgresql.conf"
+    destination = "/home/ubuntu/postgresql.conf"
+  }
+
+  provisioner "file" {
+    source = "pg_hba.conf"
+    destination = "/home/ubuntu/pg_hba.conf"
+  }
+
+  provisioner "file" {
+    source = "pg_ident.conf"
+    destination = "/home/ubuntu/pg_ident.conf"
+  }
+
+  # Reconfigure PostgreSQL to use the /db directory
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /home/ubuntu/.enginenirad/configure.sh",
-      "sudo /home/ubuntu/.enginenirad/configure.sh"
+      "sudo service postgresql stop",
+      "sudo mkdir -p /db/postgresql/9.6",
+      "sudo cp -R /var/lib/postgresql/9.6/main /db/postgresql/9.6",
+      "sudo chown -R postgres:postgres /db/postgresql",
+      "sudo cp /etc/postgresql/9.6/main/postgresql.conf /etc/postgresql/9.6/main/postgresql.conf.bak",
+      "sudo cp /home/ubuntu/postgresql.conf /etc/postgresql/9.6/main/postgresql.conf",
+      "sudo cp /home/ubuntu/pg_hba.conf /db/postgresql/9.6/main/pg_hba.conf",
+      "sudo cp /home/ubuntu/pg_ident.conf /db/postgresql/9.6/main/pg_ident.conf",
+      "sudo rm /home/ubuntu/postgresql.conf /home/ubuntu/pg_hba.conf /home/ubuntu/pg_ident.conf",
+      "sudo service postgresql start"
     ]
   }
 }

@@ -1,8 +1,3 @@
-TODO
-- upload a postgresql configuration file ?
-- use /db as the data directory for postgresql
-
-
 This is a [Terraform](https://www.terraform.io/) script for automated provisioning of an EC2 instance running PostgreSQL.
 
 ## Quick Start

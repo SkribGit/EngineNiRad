@@ -9,8 +9,12 @@ variable "availability_zone" {
 variable "instance_size" {
   default = "t2.small"
 }
-variable "ebs_data_size" {
+variable "ebs_db_size" {
   default = "40"
+}
+
+variable "postgresql_version" {
+  default = "9.6"
 }
 
 # Ubuntu 18.04 AMI IDs on various regions
