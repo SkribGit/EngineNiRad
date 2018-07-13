@@ -4,7 +4,7 @@ variable "region" {
   default = "us-east-2"
 }
 variable "availability_zone" {
-  default = "us-east-2a"
+  default = "us-east-2b"
 }
 variable "instance_size" {
   default = "t2.small"
@@ -15,6 +15,15 @@ variable "ebs_db_size" {
 
 variable "postgresql_version" {
   default = "9.6"
+}
+
+# NOTE: The subnet has to be in the same region as the region specified in aws.region above
+variable "subnet_id" {
+  default = "subnet-xxxxxxxx"
+}
+
+variable "security_groups" {
+  default = "sg-xxxxxxxx"
 }
 
 # Ubuntu 18.04 AMI IDs on various regions
