@@ -1,7 +1,3 @@
-# TODO
-
-- associate the instance into an existing VPC and security group
-
 This is a [Terraform](https://www.terraform.io/) script for automated provisioning of an EC2 instance running PostgreSQL.
 
 ## Quick Start
@@ -19,7 +15,10 @@ Don't worry, `terraform.tfvars` is in `.gitignore` so this will not be committed
 
 Modify `variables.tf`. As of this writing the configurable variables are:
 - AWS region
-- instance size
+- AWS availability zone
+- VPC subnet
+- security group
+- instance type
 - `/db` volume size
 - PostgreSQL version
 
@@ -29,7 +28,29 @@ To boot your PostgreSQL instance, run `terraform apply`.
 
 ## Customization
 
-### Changing the db volume size
+### Specify the subnet and the VPC security group
+
+Modify this part of `variables.tf`:
+
+```
+variable "subnet_id" {
+  default = "subnet-xxxxxxxx"
+}
+
+variable "security_groups" {
+  default = "sg-xxxxxxxx"
+}
+```
+
+Note that the subnet should be in the same availability zone as the AZ you've set in this block, also in `variables.tf`:
+
+```
+variable "availability_zone" {
+  default = "us-east-2b"
+}
+```
+
+### Change the db volume size
 
 This terraform script setups up a `/db` EBS volume to be used for storing the PostgreSQL database files. The default size is 50GB. You can change the size in `variables.tf`:
 
@@ -49,6 +70,6 @@ variable "region" {
 }
 
 variable "availability_zone" {
-  default = "us-east-2a"
+  default = "us-east-2b"
 }
 ```
