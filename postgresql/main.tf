@@ -10,8 +10,15 @@ resource "aws_key_pair" "auth" {
 }
 
 resource "aws_instance" "postgresql" {
+  tags {
+    Name = "postgresql"
+  }
+
   ami           = "${lookup(var.amis, var.region)}"
   instance_type = "${var.instance_size}"
+
+  subnet_id = "${var.subnet_id}"
+  security_groups = [ "${var.security_groups}" ]
 
   key_name = "${aws_key_pair.auth.id}"
 
@@ -39,7 +46,13 @@ resource "aws_instance" "postgresql" {
       "sudo sh -c 'echo deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main >> /etc/apt/sources.list.d/pgdg.list'",
       "sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -",
       "sudo apt-get -y update",
-      "sudo apt-get -y upgrade",
+
+
+      # The next line is the replacement for "sudo apt-get -y upgrade"
+      # that avoids the grub config prompt
+      # From https://askubuntu.com/questions/146921/how-do-i-apt-get-y-dist-upgrade-without-a-grub-config-prompt
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" dist-upgrade",
+
       "sudo apt install -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 libpq-dev"
     ]
   }
