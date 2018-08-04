@@ -1,10 +1,10 @@
 variable "access_key" {}
 variable "secret_key" {}
 variable "region" {
-  default = "us-east-1"
+  default = "us-east-2"
 }
 variable "availability_zone" {
-  default = "us-east-1a"
+  default = "us-east-2a"
 }
 variable "instance_size" {
   default = "t2.small"
