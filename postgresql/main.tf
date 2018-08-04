@@ -9,7 +9,7 @@ resource "aws_key_pair" "auth" {
   public_key = "${file(var.public_key_path)}"
 }
 
-resource "aws_instance" "postgresql" {
+resource "aws_instance" "choux_db_2018" {
   tags {
     Name = "postgresql"
   }
@@ -18,7 +18,8 @@ resource "aws_instance" "postgresql" {
   instance_type = "${var.instance_size}"
 
   subnet_id = "${var.subnet_id}"
-  security_groups = [ "${var.security_groups}" ]
+  vpc_security_group_ids = [ "${var.security_groups}" ]
+  associate_public_ip_address = true
 
   key_name = "${aws_key_pair.auth.id}"
 
@@ -36,10 +37,16 @@ resource "aws_instance" "postgresql" {
   # Setup PostgreSQL
   provisioner "remote-exec" {
     inline = [
-      # Setup db volume
-      "sudo mkfs -t ext4 /dev/xvdj",
+      # Setup db volume - for t2 instances
+      #"sudo mkfs -t ext4 /dev/xvdj",
+      #"sudo mkdir /db",
+      #"sudo mount /dev/xvdj /db",
+      #"sudo chown -R ubuntu:ubuntu /db",
+
+      # Setup db volume - for c5 instances
+      "sudo mkfs -t ext4 /dev/nvme0n1",
       "sudo mkdir /db",
-      "sudo mount /dev/xvdj /db",
+      "sudo mount /dev/nvme0n1 /db",
       "sudo chown -R ubuntu:ubuntu /db",
 
       # From http://www.codebind.com/linux-tutorials/install-postgresql-9-6-ubuntu-18-04-lts-linux/

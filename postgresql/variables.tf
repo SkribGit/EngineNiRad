@@ -1,16 +1,16 @@
 variable "access_key" {}
 variable "secret_key" {}
 variable "region" {
-  default = "us-east-2"
+  default = "us-east-1"
 }
 variable "availability_zone" {
-  default = "us-east-2b"
+  default = "us-east-1a"
 }
 variable "instance_size" {
   default = "t2.small"
 }
 variable "ebs_db_size" {
-  default = "40"
+  default = "50"
 }
 
 variable "postgresql_version" {
@@ -24,6 +24,10 @@ variable "subnet_id" {
 
 variable "security_groups" {
   default = "sg-xxxxxxxx"
+}
+
+variable "public_ip" {
+  default = ""
 }
 
 # Ubuntu 18.04 AMI IDs on various regions
