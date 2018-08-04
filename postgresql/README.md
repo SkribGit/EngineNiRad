@@ -26,6 +26,10 @@ Finally, you're ready!
 
 To boot your PostgreSQL instance, run `terraform apply`.
 
+## Security
+
+This script uses a PostgreSQL configuration file that is very permissive on remote connections. You need to configure the security group to restrict incoming connections on port 5432.
+
 ## Customization
 
 ### Specify the subnet and the VPC security group
