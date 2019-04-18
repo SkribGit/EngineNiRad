@@ -9,7 +9,7 @@ variable "instance_size" {
 }
 
 variable "elasticsearch_version" {
-  default = "6.2"
+  default = "6.5"
 }
 
 variable "snapshot_start_hour" {

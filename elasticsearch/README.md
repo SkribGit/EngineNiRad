@@ -51,10 +51,10 @@ For more information on AWS Elasticsearch service sizing, see https://docs.aws.a
 
 ### Change the Elasticsearch version
 
-The script boots Elasticsearch 6.2 by default. To use a different Elasticsearch version, modify this block in `variables.tf`:
+The script boots Elasticsearch 6.5 by default. To use a different Elasticsearch version, modify this block in `variables.tf`:
 
 ```
 variable "elasticsearch_version" {
-  default = "6.2"
+  default = "6.5"
 }
 ```
